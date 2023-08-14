@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,27 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/insert', function (){
+    $user = Models\User::findOrFail(1);
+
+    $address = new Models\Address(['name'=>'123 Houston av NY NY 11218']);
+
+    $user->address()->save($address);
+});
+
+Route::get('/update', function (){
+    // can use camel case with where method.
+    $address = Models\Address::whereUserId(1)->first();
+    $address->name = "5353 Updated Ave, alaska";
+    $address->save();
+});
+
+Route::get('/read', function (){
+    return Models\User::findOrFail(1)->address->name;
+});
+
+Route::get('/delete', function (){
+    return Models\User::findOrFail(1)->address()->delete();
+});
+
